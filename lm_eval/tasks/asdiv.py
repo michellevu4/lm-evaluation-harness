@@ -64,7 +64,7 @@ class Asdiv(Task):
 
     def doc_to_text(self, doc):
         # TODO: add solution-type
-        return doc["body"] + "\n" + "Question:" + doc["question"] + "\n" + "Answer:"
+        return doc["body"] + "\n" + f"{self.PROMPT_Q}:" + doc["question"] + "\n" + "Answer:"
 
     def should_decontaminate(self):
         return True

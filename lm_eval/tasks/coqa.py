@@ -58,7 +58,7 @@ class CoQA(Task):
         for (q, a) in zip_longest(
             doc["questions"]["input_text"], doc["answers"]["input_text"][:-1]
         ):  # omit target answer ai
-            question = f"Q: {q}\n\n"
+            question = f"{self.PROMPT_Q}: {q}\n\n"
             answer = f"A: {a}\n\n" if a is not None else "A:"
             doc_text += question + answer
         return doc_text

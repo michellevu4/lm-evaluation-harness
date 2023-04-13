@@ -56,7 +56,7 @@ class MCTACO(Task):
 
     def doc_to_text(self, doc):
         return (
-            f"{doc['sentence']}\nQuestion: {doc['question']}\n"
+            f"{doc['sentence']}\n{self.PROMPT_Q}: {doc['question']}\n"
             f"Answer: {doc['answer']}\nPlausible:"
         )
 

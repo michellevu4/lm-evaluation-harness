@@ -68,8 +68,8 @@ class CoLA(Task):
         return self.dataset["validation"]
 
     def doc_to_text(self, doc):
-        return "{}\nQuestion: Does this sentence make sense?\nAnswer:".format(
-            doc["sentence"]
+        return "{}\n{}: Does this sentence make sense?\nAnswer:".format(
+            doc["sentence"], self.PROMPT_Q
         )
 
     def should_decontaminate(self):

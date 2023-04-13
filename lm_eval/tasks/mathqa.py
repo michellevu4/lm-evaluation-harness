@@ -57,7 +57,7 @@ class MathQA(MultipleChoiceTask):
         ]
 
         out_doc = {
-            "query": "Question: " + doc["Problem"] + "\nAnswer:",
+            "query": f"{self.PROMPT_Q}: " + doc["Problem"] + "\nAnswer:",
             "choices": choices,
             "gold": answer_idx,
         }

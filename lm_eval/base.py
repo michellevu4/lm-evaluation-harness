@@ -386,6 +386,8 @@ class Task(abc.ABC):
     # The name of a subset within `DATASET_PATH`.
     DATASET_NAME: str = None
 
+    PROMPT_Q: str = "User"  # e.g. "Question" or "Q"
+
     def __init__(self, data_dir=None, cache_dir=None, download_mode=None):
         """
         :param data_dir: str
@@ -639,7 +641,12 @@ class Task(abc.ABC):
             )
 
         example = self.doc_to_text(doc)
-        return description + labeled_examples + example
+        examples = description + labeled_examples + example
+
+        # PROMPT_MODIFIER = "User:"
+        # examples = examples.replace("Question:", PROMPT_MODIFIER)
+        # examples = examples.replace("Q:", PROMPT_MODIFIER)
+        return examples
 
 
 class MultipleChoiceTask(Task):

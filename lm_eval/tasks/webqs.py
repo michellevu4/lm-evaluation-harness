@@ -54,7 +54,7 @@ class WebQs(Task):
         return self.dataset["test"]
 
     def doc_to_text(self, doc):
-        return "Question: " + doc["question"] + "\nAnswer:"
+        return f"{self.PROMPT_Q}: " + doc["question"] + "\nAnswer:"
 
     def should_decontaminate(self):
         return True

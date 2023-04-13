@@ -52,8 +52,8 @@ class Pubmed_QA(Task):
 
     def doc_to_text(self, doc):
         ctxs = "\n".join(doc["context"]["contexts"])
-        return "Abstract: {}\nQuestion: {}\nAnswer:".format(
-            ctxs, doc["question"], doc["final_decision"]
+        return "Abstract: {}\n{}: {}\nAnswer:".format(
+            ctxs, self.PROMPT_Q, doc["question"], doc["final_decision"]
         )
 
     def should_decontaminate(self):

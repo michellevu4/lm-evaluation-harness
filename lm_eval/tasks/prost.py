@@ -64,7 +64,7 @@ class PROST(MultipleChoiceTask):
 
     def _process_doc(self, doc):
         out_doc = {
-            "query": f"{doc['context']}\nQuestion: {doc['ex_question']}\nAnswer:",
+            "query": f"{doc['context']}\n{self.PROMPT_Q}: {doc['ex_question']}\nAnswer:",
             "choices": [doc["A"], doc["B"], doc["C"], doc["D"]],
             "gold": doc["label"],
         }

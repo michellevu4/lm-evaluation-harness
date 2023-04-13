@@ -57,7 +57,7 @@ class PiQA(MultipleChoiceTask):
         return out_doc
 
     def doc_to_text(self, doc):
-        return "Question: " + doc["goal"] + "\nAnswer:"
+        return f"{self.PROMPT_Q}: " + doc["goal"] + "\nAnswer:"
 
     def should_decontaminate(self):
         return True

@@ -65,7 +65,7 @@ class LogiQA(MultipleChoiceTask):
             Answer:
             """
             prompt = "Passage: " + doc["context"] + "\n"
-            prompt += "Question: " + doc["question"] + "\nChoices:\n"
+            prompt += f"{self.PROMPT_Q}: " + doc["question"] + "\nChoices:\n"
             for choice, option in zip(choices, doc["options"]):
                 prompt += f"{choice.upper()}. {option}\n"
             prompt += "Answer:"

@@ -52,7 +52,7 @@ class TriviaQA(Task):
         raise NotImplementedError()
 
     def doc_to_text(self, doc):
-        return f"Question: {doc['question']}\nAnswer:"
+        return f"{self.PROMPT_Q}: {doc['question']}\nAnswer:"
 
     def should_decontaminate(self):
         return True

@@ -110,7 +110,7 @@ class RACE(Task):
                     problem["question"][-5:] + self.get_answer_option(problem) + "\n"
                 )
             else:
-                question = "Question: " + problem["question"] + "\n"
+                question = f"{self.PROMPT_Q}: " + problem["question"] + "\n"
                 answer = "Answer: " + self.get_answer_option(problem) + "\n"
                 text += question + answer
         text += self.last_problem(doc)["question"]

@@ -52,7 +52,7 @@ class HeadQABase(MultipleChoiceTask):
     def _process_doc(self, doc):
         out_doc = {
             "id": doc["qid"],
-            "query": "Question: " + doc["qtext"] + "\nAnswer:",
+            "query": f"{self.PROMPT_Q}: " + doc["qtext"] + "\nAnswer:",
             "choices": [answer["atext"] for answer in doc["answers"]],
             "gold": int(doc["ra"]) - 1,
         }

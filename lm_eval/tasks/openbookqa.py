@@ -55,7 +55,7 @@ class OpenBookQA(MultipleChoiceTask):
     def _process_doc(self, doc):
         out_doc = {
             "id": doc["id"],
-            "query": doc["question_stem"],
+            "query": f"{self.PROMPT_Q}: {doc['question_stem']}",
             "choices": doc["choices"]["text"],
             "gold": ["A", "B", "C", "D"].index(doc["answerKey"].strip()),
         }

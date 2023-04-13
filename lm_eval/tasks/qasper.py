@@ -123,7 +123,7 @@ class QASPER(Task):
             + "ABSTRACT: "
             + doc["abstract"]
             + "\n\n"
-            + "Q: "
+            + f"{self.PROMPT_Q}: "
             + doc["question"]
             + "\n\n"
             + "A:"

@@ -66,7 +66,7 @@ class ANLIBase(Task):
         # want to do it exactly as OA did?
         return (
             doc["premise"]
-            + "\nQuestion: "
+            + f"\n{self.PROMPT_Q}: "
             + doc["hypothesis"]
             + " True, False, or Neither?\nAnswer:"
         )

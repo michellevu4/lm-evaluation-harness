@@ -55,7 +55,7 @@ class BoolQ(Task):
         return self.dataset["validation"]
 
     def doc_to_text(self, doc):
-        return f"{doc['passage']}\nQuestion: {doc['question']}?\nAnswer:"
+        return f"{doc['passage']}\n{self.PROMPT_Q}: {doc['question']}?\nAnswer:"
 
     def should_decontaminate(self):
         return True
@@ -111,8 +111,9 @@ class CommitmentBank(Task):
         return self.dataset["validation"]
 
     def doc_to_text(self, doc):
-        return "{}\nQuestion: {}. True, False or Neither?\nAnswer:".format(
+        return "{}\n{}: {}. True, False or Neither?\nAnswer:".format(
             doc["premise"],
+            self.PROMPT_Q,
             doc["hypothesis"],
         )
 
@@ -242,7 +243,7 @@ class MultiRC(Task):
         return self.dataset["validation"]
 
     def doc_to_text(self, doc):
-        return f"{doc['paragraph']}\nQuestion: {doc['question']}\nAnswer:"
+        return f"{doc['paragraph']}\n{self.PROMPT_Q}: {doc['question']}\nAnswer:"
 
     def doc_to_target(self, doc):
         return " " + self.format_answer(answer=doc["answer"], label=doc["label"])
@@ -390,10 +391,11 @@ class WordsInContext(Task):
 
     def doc_to_text(self, doc):
         return (
-            "Sentence 1: {}\nSentence 2: {}\nQuestion: Is the word '{}' used in the same way in the"
+            "Sentence 1: {}\nSentence 2: {}\n{}: Is the word '{}' used in the same way in the"
             " two sentences above?\nAnswer:".format(
                 doc["sentence1"],
                 doc["sentence2"],
+                self.PROMPT_Q,
                 doc["sentence1"][doc["start1"] : doc["end1"]],
             )
         )
@@ -460,7 +462,7 @@ class SGWinogradSchemaChallenge(Task):
         pronoun = doc["span2_text"]
         text = (
             f"Passage: {passage}\n"
-            + f'Question: In the passage above, does the pronoun "*{pronoun}*" refer to "*{noun}*"?\n'
+            + f'{self.PROMPT_Q}: In the passage above, does the pronoun "*{pronoun}*" refer to "*{noun}*"?\n'
             + "Answer:"
         )
         return text

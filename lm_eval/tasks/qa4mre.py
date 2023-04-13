@@ -55,7 +55,7 @@ class QA4MRE(MultipleChoiceTask):
         return out_doc
 
     def doc_to_text(self, doc):
-        return "{}\nQuestion: {}\nAnswer:".format(doc["source"], doc["query"])
+        return "{}\n{}: {}\nAnswer:".format(doc["source"], self.PROMPT_Q, doc["query"])
 
     def should_decontaminate(self):
         return True

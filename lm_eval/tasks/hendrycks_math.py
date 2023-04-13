@@ -51,7 +51,7 @@ class Math(Task):
         return doc
 
     def doc_to_text(self, doc):
-        return "Problem: " + doc["problem"] + "\nAnswer:"
+        return f"{self.PROMPT_Q}: " + doc["problem"] + "\nAnswer:"
 
     def should_decontaminate(self):
         return True

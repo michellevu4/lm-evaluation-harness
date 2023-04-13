@@ -61,7 +61,7 @@ class NaturalQs(Task):
         return rnd.sample(self._training_docs, k)
 
     def doc_to_text(self, doc):
-        return "Q: " + doc["question"]["text"] + "\n\n" + "A:"
+        return f"{self.PROMPT_Q}: " + doc["question"]["text"] + "\n\n" + "A:"
 
     def should_decontaminate(self):
         return True

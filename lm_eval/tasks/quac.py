@@ -62,7 +62,7 @@ class QuAC(Task):
             + "PARAGRAPH: "
             + doc["paragraph"]
             + "\n\n"
-            + "Q: "
+            + f"{self.PROMPT_Q}: "
             + doc["question"]
             + "\n\n"
             + "A: "

@@ -112,7 +112,7 @@ class DROP(Task):
         )
 
     def doc_to_text(self, doc):
-        return f"Passage: {doc['passage']}\nQuestion: {doc['question']}\nAnswer:"
+        return f"Passage: {doc['passage']}\n{self.PROMPT_Q}: {doc['question']}\nAnswer:"
 
     def should_decontaminate(self):
         return True

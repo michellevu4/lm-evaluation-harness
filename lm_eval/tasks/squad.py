@@ -76,7 +76,7 @@ class SQuAD2(Task):
             + "Background: "
             + doc["context"]
             + "\n\n"
-            + "Question: "
+            + f"{self.PROMPT_Q}: "
             + doc["question"]
             + "\n\n"
             + "Answer:"

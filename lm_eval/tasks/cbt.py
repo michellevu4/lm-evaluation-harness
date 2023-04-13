@@ -72,7 +72,7 @@ class CBTBase(Task):
 
     def doc_to_text(self, doc):
         passage = " ".join(doc["sentences"])
-        text = "Passage: " + passage + "\nQuestion: " + doc["question"]
+        text = "Passage: " + passage + f"\n{self.PROMPT_Q}: " + doc["question"]
         return self.detokenize(text)
 
     def should_decontaminate(self):
