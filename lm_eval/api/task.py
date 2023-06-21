@@ -65,6 +65,7 @@ class TaskConfig(dict):
     template_aliases: str = None
     doc_to_text: Union[Callable, str] = None
     doc_to_target: Union[Callable, str] = None
+    process_results: Union[Callable, str] = None
     use_prompt: str = None
     delimiter: str = "\n\n"
     description: str = ""
@@ -97,12 +98,28 @@ class TaskConfig(dict):
             if type(self.gold_alias) == str:
                 self.gold_alias = self.template_aliases + self.gold_alias
 
-        if self.generation_kwargs or self.output_type == "greedy_until":
-            assert (
-                self.output_type == "greedy_until"
-            ), "passed `generation_kwargs`, but not using a generation request type!"
-            # ensure that we greedily generate in absence of explicit arguments otherwise
-            self.generation_kwargs = {"do_sample": False, "temperature": 0.0}
+        if self.generation_kwargs is not None:
+
+            if self.output_type != "greedy_until":
+                eval_logger.warning(
+                    "passed `generation_kwargs`, but not using a generation request type!"
+                )
+
+            if "temperature" in self.generation_kwargs:
+                self.generation_kwargs["temperature"] = float(
+                    self.generation_kwargs["temperature"]
+                )
+
+            if "until" not in self.generation_kwargs:
+                self.generation_kwargs["until"] = [self.delimiter]
+        else:
+            if self.output_type == "greedy_until":
+                # ensure that we greedily generate in absence of explicit arguments otherwise
+                self.generation_kwargs = {
+                    "until": None if self.delimiter is None else [self.delimiter],
+                    "do_sample": False,
+                    "temperature": 0.0,
+                }
 
     def __getitem__(self, item):
         return getattr(self, item)
@@ -523,23 +540,29 @@ class ConfigurableTask(Task):
                     for key in metric_config
                     if key not in ["metric", "aggregation", "higher_is_better"]
                 }
-                try:
-                    self._metric_fn_list[metric_name] = METRIC_REGISTRY[metric_name]
-                except Exception:
-                    eval_logger.warning(
-                        f"Metric {metric_name} not found, "
-                        "Searching from https://huggingface.co/evaluate-metric"
-                    )
-                    try:
-                        metric_object = evaluate.load(metric_name)
-                        self._metric_fn_list[metric_name] = metric_object
-                        self._metric_fn_kwargs[metric_name] = kwargs
 
+                if "fn" in metric_config:
+                    self._metric_fn_list[metric_name] = metric_config["fn"]
+                else:
+                    try:
+                        self._metric_fn_list[metric_name] = METRIC_REGISTRY[metric_name]
                     except Exception:
-                        raise Warning(
-                            "{} not found in the evaluate library!".format(metric_name),
-                            "Please check https://huggingface.co/evaluate-metric",
+                        eval_logger.warning(
+                            f"Metric {metric_name} not found, "
+                            "Searching from https://huggingface.co/evaluate-metric"
                         )
+                        try:
+                            metric_object = evaluate.load(metric_name)
+                            self._metric_fn_list[metric_name] = metric_object
+                            self._metric_fn_kwargs[metric_name] = kwargs
+
+                        except Exception:
+                            raise Warning(
+                                "{} not found in the evaluate library!".format(
+                                    metric_name
+                                ),
+                                "Please check https://huggingface.co/evaluate-metric",
+                            )
 
                 if "aggregation" in metric_config:
                     agg_name = metric_config["aggregation"]
@@ -784,8 +807,8 @@ class ConfigurableTask(Task):
 
     def process_results(self, doc, results):
 
-        # if callable(self._config.process_results):
-        #     return self._config.process_results(doc, results)
+        if callable(self._config.process_results):
+            return self._config.process_results(doc, results)
 
         result_dict = {}
         use_metric = list(self._metric_fn_list.keys())
