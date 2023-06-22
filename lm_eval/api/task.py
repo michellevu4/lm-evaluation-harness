@@ -67,7 +67,6 @@ class TaskConfig(dict):
     doc_to_target: Union[Callable, str] = None
     process_results: Union[Callable, str] = None
     use_prompt: str = None
-    delimiter: str = "\n\n"
     description: str = ""
 
     num_fewshot: int = 0
@@ -78,6 +77,8 @@ class TaskConfig(dict):
     gold_alias: Union[Callable, str] = None
     output_type: str = "greedy_until"
     generation_kwargs: dict = None
+    target_delimiter: str = " "
+    fewshot_delimiter: str = "\n\n"
     filter_list: Union[str, list] = None
     should_decontaminate: bool = False
     doc_to_decontamination_query: str = None
