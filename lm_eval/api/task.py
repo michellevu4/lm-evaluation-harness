@@ -127,6 +127,9 @@ class TaskConfig(dict):
         for k, v in list(cfg_dict.items()):
             if v is None:
                 cfg_dict.pop(k)
+            elif isinstance(v, Callable):
+                # TODO: this should handle Promptsource template objects as a separate case?
+                cfg_dict[k] = str(v)
         return cfg_dict
 
 
@@ -887,7 +890,9 @@ class ConfigurableTask(Task):
 
             for key, result in zip(self._metric_fn_list.keys(), results):
                 _dict = self._metric_fn_list[key].compute(
-                    references=[gold], predictions=[result], **self._metric_kwargs[key]
+                    references=[gold],
+                    predictions=[result],
+                    **self._metric_fn_kwargs[key],
                 )
 
                 result_dict = {**result_dict, **_dict}
