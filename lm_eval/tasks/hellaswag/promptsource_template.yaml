@@ -1,11 +1,9 @@
 group:
-  - super-glue-promptsource
-task: "GPT-3 Style"
-dataset_path: super_glue
-dataset_name: boolq
+  - hellaswag-promptsource
+dataset_path: hellaswag
+output_type: greedy_until
 training_split: train
 validation_split: validation
-use_prompt: "promptsource:GPT-3 Style"
 metric_list:
   - metric: exact_match
     aggregation: mean

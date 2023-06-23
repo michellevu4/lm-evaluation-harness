@@ -1,11 +1,10 @@
 group:
-  - super-glue-promptsource
-task: "C1 or C2? premise, so/because…"
+  - boolq-promptsource
 dataset_path: super_glue
-dataset_name: copa
+dataset_name: boolq
+output_type: greedy_until
 training_split: train
 validation_split: validation
-use_prompt: "promptsource:C1 or C2? premise, so/because…"
 metric_list:
   - metric: exact_match
     aggregation: mean

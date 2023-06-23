@@ -1,6 +1,9 @@
-include: default.yaml
-task: "boolq-seq2seq"
+group:
+  - anli-promptsource
+dataset_path: anli
 output_type: greedy_until
+training_split: train
+validation_split: validation
 metric_list:
   - metric: exact_match
     aggregation: mean
