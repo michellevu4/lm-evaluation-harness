@@ -1,4 +1,4 @@
-from promptsource import s
+from promptsource.templates import DatasetTemplates
 
 T0_EVAL = [
     ("super_glue", "wsc.fixed"),  # Coreference Resolution
@@ -11,8 +11,14 @@ T0_EVAL = [
     ("super_glue", "wic"),  # Word Sense Disambiguation
 ]
 
-for dataset_path, dataset_name in T0_EVAL:
+for dataset_name, subset_name in T0_EVAL:
 
-    pass
-    # "include: promptsource_template.yaml"
-    # use_prompts:
+    if subset_name is None:
+        prompts = DatasetTemplates(dataset_name=dataset_name)
+    else:
+        prompts = DatasetTemplates(dataset_name=dataset_name, subset_name=subset_name)
+
+    for prompt_name in prompts.all_template_names:
+        config_dict = {
+            "include: promptsource_template.yaml" "use_prompts": prompts[prompt_name]
+        }
