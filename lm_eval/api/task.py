@@ -52,7 +52,6 @@ class TaskConfig(dict):
 
     task: str = None
     group: Union[str, list] = None
-    reference: str = None
 
     dataset_path: str = None
     dataset_name: str = None
@@ -68,6 +67,8 @@ class TaskConfig(dict):
     process_results: Union[Callable, str] = None
     use_prompt: str = None
     description: str = ""
+    target_delimiter: str = " "
+    fewshot_delimiter: str = "\n\n"
 
     num_fewshot: int = 0
     batch_size: int = 1
@@ -77,8 +78,6 @@ class TaskConfig(dict):
     gold_alias: Union[Callable, str] = None
     output_type: str = "greedy_until"
     generation_kwargs: dict = None
-    target_delimiter: str = " "
-    fewshot_delimiter: str = "\n\n"
     filter_list: Union[str, list] = None
     should_decontaminate: bool = False
     doc_to_decontamination_query: str = None
@@ -283,7 +282,7 @@ class Task(abc.ABC):
         else:
             eval_logger.warning(
                 "has_training_docs and has_validation_docs are False"
-                ", using test_docs but this is not recommended."
+                ", using test_docs as fewshot_docs but this is not recommended."
             )
             return self.test_docs()
 
@@ -344,7 +343,8 @@ class Task(abc.ABC):
             fewshot_ctx = self.fewshot_context(
                 doc, self._config.num_fewshot, rnd=random.Random()
             )
-            # TODO: hardcoded for now: # of runs on each input to be 2. # TODO: we should override this if doing greedy gen so users don't waste time+compute
+
+            # TODO: we should override self._config.repeats if doing greedy gen so users don't waste time+compute
             inst = self.construct_requests(
                 doc=doc,
                 ctx=fewshot_ctx,
@@ -726,12 +726,14 @@ class ConfigurableTask(Task):
             raise TypeError
 
     def gold_alias(self, doc):
-        # TODO: reevaluate if we need this. implemented to have a
-        # processed version of answer to put into gsm8k exact_match scoring as ref.
+        # returns a version of the gold target answer to a document,
+        # which should be passed into metric for scoring as the ground truth.
+
+        # in multiple_choice tasks, this should be castable to an int corresponding to the index
+        # within the answer choices, while doc_to_target is the string version of {{answer_choices[gold]}}.
         if self._config.gold_alias is not None:
             doc_to_target = self._config.gold_alias
         else:
-            # doc_to_target = self._config.doc_to_target
             return self.doc_to_target(doc)
 
         if type(doc_to_target) == str:

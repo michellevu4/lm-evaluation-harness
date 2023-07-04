@@ -1,4 +1,6 @@
 include: default.yaml
+group:
+  - super-glue-lm-eval-v1-seq2seq
 task: "boolq-seq2seq"
 output_type: greedy_until
 metric_list:

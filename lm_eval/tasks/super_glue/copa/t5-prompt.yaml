@@ -1,12 +1,12 @@
 group:
   - super-glue-t5-prompt
-task: super_glue-record-t5-prompt
+task: super_glue-copa-t5-prompt
 dataset_path: super_glue
-dataset_name: record
+dataset_name: copa
 training_split: train
 validation_split: validation
-doc_to_text: "record query: {{query}} entities: {{entities}} passage: {{passage}}"
-doc_to_target: "{{answers}}"
+doc_to_text: "copa choice1: {{choice1}} choice2: {{choice2}} question: {{question}}"
+doc_to_target: "{% set answer_choices = ['False', 'True'] %}{{answer_choices[label]}}"
 metric_list:
   - metric: exact_match
     aggregation: mean
