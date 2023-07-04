@@ -1,0 +1,11 @@
+group:
+  - super-glue-lm-eval-v1
+task: wsc
+dataset_path: super_glue
+dataset_name: wsc
+training_split: train
+validation_split: validation
+doc_to_text: !function "preprocess_wsc.default_doc_to_text"
+doc_to_target: "{% set answer_choices = ['False', 'True'] %}{{answer_choices[label]}}"
+metric_list:
+  - metric: acc
